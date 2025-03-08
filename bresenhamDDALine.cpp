@@ -34,7 +34,7 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
                     d1 += d1c1;
                 } else {
                     x++;
-                    y--;
+                    y++;
                     d1 += d1c2;
                 }
                 SetPixel(hdc, x, y, c);
@@ -47,7 +47,7 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
                     d1 += d1c1;
                 } else {
                     x--;
-                    y--;
+                    y++;
                     d1 += d1c2;
                 }
                 SetPixel(hdc, x, y, c);
@@ -60,7 +60,7 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
                     d1 += d1c1;
                 } else {
                     x++;
-                    y++;
+                    y--;
                     d1 += d1c2;
                 }
                 SetPixel(hdc, x, y, c);
@@ -73,7 +73,7 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
                     d1 += d1c1;
                 } else {
                     x--;
-                    y++;
+                    y--;
                     d1 += d1c2;
                 }
                 SetPixel(hdc, x, y, c);
@@ -222,28 +222,30 @@ void DrawLineDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c) {
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 	HDC hdc;
-	static int xc1, yc1;
+	static int x1, y1;
 
-	static int xc2, yc2, x, y, r, oldr;
+	static int x2, y2, oldx2, oldy2;
 
 	static bool start = false;
-	static bool finished = false;
 
 	switch (m) {
 	case WM_LBUTTONDOWN:
 		hdc = GetDC(hwnd);
 
-        BresenhamsEfficientDDA(hdc, 100, 100, 200, 150, RGB(0, 0, 0));
-        BresenhamsEfficientDDA(hdc, 100, 100, 0, 150, RGB(0, 0, 0));
-        BresenhamsEfficientDDA(hdc, 100, 100, 200, 50, RGB(0, 0, 0));
-        BresenhamsEfficientDDA(hdc, 100, 100, 0, 50, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 200, 150, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 0, 150, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 200, 50, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 0, 50, RGB(0, 0, 0));
 
-        BresenhamsEfficientDDA(hdc, 100, 100, 150, 200, RGB(0, 0, 0));
-        BresenhamsEfficientDDA(hdc, 100, 100, 150, 0, RGB(0, 0, 0));
-        BresenhamsEfficientDDA(hdc, 100, 100, 50, 200, RGB(0, 0, 0));
-        BresenhamsEfficientDDA(hdc, 100, 100, 50, 0, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 150, 200, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 150, 0, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 50, 200, RGB(0, 0, 0));
+        // BresenhamsEfficientDDA(hdc, 100, 100, 50, 0, RGB(0, 0, 0));
 
+        x1 = LOWORD(lp);
+        y1 = HIWORD(lp);
 
+        start = true;
 
 		ReleaseDC(hwnd, hdc);
 		break;
@@ -251,11 +253,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 	case WM_LBUTTONUP:
 		hdc = GetDC(hwnd);
 
+        start = false;
+
 		ReleaseDC(hwnd, hdc);
 		break;
 
 	case WM_MOUSEMOVE:
 		hdc = GetDC(hwnd);
+
+        if(start) {
+            oldx2 = x2;
+            oldy2 = y2;
+
+            x2 = LOWORD(lp);
+            y2 = HIWORD(lp);
+
+            BresenhamsEfficientDDA(hdc, x1, y1, oldx2, oldy2, RGB(192, 192, 192));
+            BresenhamsEfficientDDA(hdc, x1, y1, x2, y2, RGB(0, 0, 0));
+        }
 		
 
 		ReleaseDC(hwnd, hdc);
