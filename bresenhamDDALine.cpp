@@ -120,7 +120,7 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
                 SetPixel(hdc, x, y, c);
             }
 
-        } else if (x2 < x1 && y2 < y1) {
+        } else if (x2 <= x1 && y2 <= y1) {
             while(y > y2) {
                 if(d2 < 0) {
                     y--;
@@ -254,6 +254,12 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 		hdc = GetDC(hwnd);
 
         start = false;
+        oldx2 = 0;
+        oldy2 = 0;
+
+        x1 = 0;
+        y1 = 0;
+
 
 		ReleaseDC(hwnd, hdc);
 		break;
