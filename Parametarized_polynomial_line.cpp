@@ -37,9 +37,9 @@ void ParametarizedPolynomialLine(HDC hdc, int x1, int y1, int x2, int y2, COLORR
     // double stepB = 1.0/abs(alfaB);
 
 
-    if(alfa1 == 0 || alfa2 == 0) {
-        return;
-    }
+    // if(alfa1 == 0 || alfa2 == 0) {
+    //     return;
+    // }
     
     for (double t = 0; t <= 1; t += step) {
         double x = alfa1 * t + beta1;
