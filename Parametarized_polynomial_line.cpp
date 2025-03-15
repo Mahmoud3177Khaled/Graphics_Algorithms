@@ -57,8 +57,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 	case WM_LBUTTONDOWN:
 		hdc = GetDC(hwnd);
 
+        // x2 = x1;
+        // y2 = y1;
+
         x1 = LOWORD(lp);
         y1 = HIWORD(lp);
+
+        x2 = x1;
+        y2 = y1;
 
         start = true;
 
@@ -69,11 +75,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 		hdc = GetDC(hwnd);
 
         start = false;
-        oldx2 = 0;
-        oldy2 = 0;
 
-        x1 = 0;
-        y1 = 0;
+        x2 = x1;
+        y2 = y1;
 
 
 		ReleaseDC(hwnd, hdc);
