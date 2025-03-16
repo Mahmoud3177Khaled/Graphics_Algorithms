@@ -19,8 +19,28 @@ void Draw8Points(HDC hdc, int xc, int yc, int x, int y, COLORREF c) {
 
 }
 
-void CircleCartesienNaive(HDC hdc, int xc, int yc, int r, COLORREF c) {
+void paramQuadCurve(HDC hdc, int x1, int y1, int x2, int y2, int x3, int y3, int points, COLORREF c) {
+	double alpha1 = 2*x1 - 4*x2 + 2*x3;
+	double beta1 = -3*x1 + 4*x2 - x3;
+	double omega1 = x1;
 	
+	double alpha2 = 2*y1 - 4*y2 + 2*y3;
+	double beta2 = -3*y1 + 4*y2 - y3;
+	double omega2 = y1;
+
+	double step = 1.0/points;
+
+	for (double t = 0; t <= 1; t += step)
+	{
+		double x = alpha1*t*t + beta1*t + omega1;
+		double y = alpha2*t*t + beta2*t + omega2;
+
+		SetPixel(hdc, round(x), round(y), c);
+	}
+	
+
+
+
 }
 
 
@@ -31,6 +51,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 	switch (m) {
 	case WM_LBUTTONDOWN:
 		hdc = GetDC(hwnd);
+
+		paramQuadCurve(hdc, 100, 100, 150, 150, 200, 100, 100, RGB(0, 0, 0));
 
 		ReleaseDC(hwnd, hdc);
 		break;
