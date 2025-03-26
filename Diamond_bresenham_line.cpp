@@ -1,5 +1,6 @@
 #include<Windows.h>
 #include<math.h>
+#include<algorithm>
 
 using namespace std;
 
@@ -268,7 +269,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 
             x2 = LOWORD(lp);
             y2 = HIWORD(lp);
-
 
             BresenhamsEfficientDDA(hdc, x1-1, y1-1, x1-1, oldy2+1, RGB(192, 192, 192));
             BresenhamsEfficientDDA(hdc, x1-1, y1-1, oldx2+1, y1-1, RGB(192, 192, 192));
