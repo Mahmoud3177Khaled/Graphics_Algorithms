@@ -201,7 +201,7 @@ void CircleBresenhamEff(HDC hdc, int xc, int yc, int r, COLORREF c) {
 
 }
 
-void floodFill(HDC hdc, int x, int y, COLORREF fc, COLORREF bc) {
+void floodFillSoftStack(HDC hdc, int x, int y, COLORREF fc, COLORREF bc) {
     stack<Point> st;
 
     // 1. add
@@ -316,7 +316,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
         x = GET_X_LPARAM(lp);
         y = GET_Y_LPARAM(lp);
 
-        floodFill(hdc, x, y, RGB(0, 0, 0), RGB(0, 0, 0));
+        floodFillSoftStack(hdc, x, y, RGB(0, 0, 0), RGB(0, 0, 0));
 
         ReleaseDC(hwnd, hdc);
         break;
