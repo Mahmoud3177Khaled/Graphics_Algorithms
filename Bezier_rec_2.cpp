@@ -61,7 +61,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
         case WM_LBUTTONDOWN:
             hdc = GetDC(hwnd);
 
-            BezierRec2(hdc, Point(100, 100), Point(150, 150), Point(200, 150), Point(300, 100), RGB(0, 0, 0));
+            BezierRec2(hdc, Point(100, 100), Point(150, 150), Point(200, 150), Point(250, 100), RGB(0, 0, 0));
 
             ReleaseDC(hwnd, hdc);
             break;
