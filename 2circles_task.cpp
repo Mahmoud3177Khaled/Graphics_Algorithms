@@ -293,6 +293,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
         }
         
         c++;
+        c = c%2;
         
 		ReleaseDC(hwnd, hdc);
 		break;
