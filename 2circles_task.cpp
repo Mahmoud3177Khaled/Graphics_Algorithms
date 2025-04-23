@@ -276,7 +276,7 @@ void shadeQuarter(HDC hdc, int xc, int yc, int r, COLORREF c) {
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 	HDC hdc;
-	static int x1, y1, x2, y2, x3, y3, c = 0, r, r1, r2, xd, yd;
+	static int x1, y1, x2, y2, x3, y3, c = 0, r, r1, r2;
 
 	switch (m) {
 	case WM_LBUTTONDOWN:
