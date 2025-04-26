@@ -237,7 +237,7 @@ void lineFill(HDC hdc, Point p[], int n, COLORREF c) {
 // Window procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
     HDC hdc;
-    static Point p[3], pp;
+    static Point p[30], pp;
     static int c = 0, x, y;
 
     switch (m) {
@@ -251,13 +251,14 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 
             p[c] = pp;
             c++;
+            c = c%3;
 
-            if(c == 3) {
+            if(c%3 == 0) {
                 lineFill(hdc, p, 3, RGB(0, 0, 0));
                 // Sleep(1000);
-                BresenhamsEfficientDDA(hdc, p[0].x, p[0].y, p[1].x, p[1].y, RGB(0, 0, 0));
-                BresenhamsEfficientDDA(hdc, p[1].x, p[1].y, p[2].x, p[2].y, RGB(0, 0, 0));
-                BresenhamsEfficientDDA(hdc, p[2].x, p[2].y, p[0].x, p[0].y, RGB(0, 0, 0));
+                BresenhamsEfficientDDA(hdc, p[c%3].x, p[c%3].y, p[c%3+1].x, p[c%3+1].y, RGB(0, 0, 0));
+                BresenhamsEfficientDDA(hdc, p[c%3+1].x, p[c%3+1].y, p[c%3+2].x, p[c%3+2].y, RGB(0, 0, 0));
+                BresenhamsEfficientDDA(hdc, p[c%3+2].x, p[c%3+2].y, p[c%3].x, p[c%3].y, RGB(0, 0, 0));
 
             }
 
