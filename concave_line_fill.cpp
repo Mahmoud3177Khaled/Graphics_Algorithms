@@ -175,11 +175,11 @@ void edge2table(Point p1, Point p2, EdgeTable table) {
     double x = p1.x;
     int y = p1.y;
 
-    double m = (p2.y-p1.y)/(p2.x-p1.x);
+    double m = (double)(p2.y-p1.y)/(p2.x-p1.x);
 
     while(y < p2.y) {
 
-        if(x < table->xl) {
+        if(x < table[y].xl) {
             table[y].xl = ceil(x);
         }
 
@@ -217,6 +217,8 @@ void table2screen(HDC hdc, EdgeTable table, COLORREF c) {
             {
                 SetPixel(hdc, j, i, c);
             }
+
+            // BresenhamsEfficientDDA(hdc, table[i].xl, i, table[i].xr, i, c);
             
         }
     }
@@ -253,9 +255,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
             if(c == 3) {
                 lineFill(hdc, p, 3, RGB(0, 0, 0));
                 // Sleep(1000);
-                // BresenhamsEfficientDDA(hdc, p[0].x, p[0].y, p[1].x, p[1].y, RGB(0, 0, 0));
-                // BresenhamsEfficientDDA(hdc, p[1].x, p[1].y, p[2].x, p[2].y, RGB(0, 0, 0));
-                // BresenhamsEfficientDDA(hdc, p[2].x, p[2].y, p[0].x, p[0].y, RGB(0, 0, 0));
+                BresenhamsEfficientDDA(hdc, p[0].x, p[0].y, p[1].x, p[1].y, RGB(0, 0, 0));
+                BresenhamsEfficientDDA(hdc, p[1].x, p[1].y, p[2].x, p[2].y, RGB(0, 0, 0));
+                BresenhamsEfficientDDA(hdc, p[2].x, p[2].y, p[0].x, p[0].y, RGB(0, 0, 0));
 
             }
 

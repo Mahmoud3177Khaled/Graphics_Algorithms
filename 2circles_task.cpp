@@ -259,16 +259,16 @@ void shadeQuarter(HDC hdc, int xc, int yc, int r, COLORREF c) {
             y--;
         }
 
-        BresenhamsEfficientDDA(hdc, xc, yc, x + xc, y + yc, c);
-        BresenhamsEfficientDDA(hdc, xc, yc, xc - x, yc - y, c);
+        // BresenhamsEfficientDDA(hdc, xc, yc, x + xc, y + yc, c);
+        // BresenhamsEfficientDDA(hdc, xc, yc, xc - x, yc - y, c);
         
     }
     
-    // BresenhamsEfficientDDA(hdc, xc, yc, x + xc, y + yc, c);
-    // BresenhamsEfficientDDA(hdc, xc, yc, xc - x, yc - y, c);
+    BresenhamsEfficientDDA(hdc, xc, yc, x + xc, y + yc, c);
+    BresenhamsEfficientDDA(hdc, xc, yc, xc - x, yc - y, c);
 
-    // floodFillSoftStack(hdc, xc + 2, yc + 5, RGB(0 ,0 ,0), RGB(0 ,0 ,0));
-    // floodFillSoftStack(hdc, xc - 2, yc - 5, RGB(0 ,0 ,0), RGB(0 ,0 ,0));
+    floodFillSoftStack(hdc, xc + 2, yc + 5, RGB(0 ,0 ,0), RGB(0 ,0 ,0));
+    floodFillSoftStack(hdc, xc - 2, yc - 5, RGB(0 ,0 ,0), RGB(0 ,0 ,0));
 
 
         
