@@ -1,9 +1,9 @@
 #include <Windows.h>
 #include <math.h>
+#include <vector>
 #include <algorithm>
 #include <climits>
 #include <List>
-#include <Algorithm>
 // #include "1_bresenhamDDALine.cpp"
 
 using namespace std;
@@ -12,26 +12,25 @@ int roundLocal(double x) {
     return (int)(x + 0.5);
 }
 
-typedef struct {
-    list<node>* nodes;
-
-} EdgeTable[800];
 
 struct node {
     double x;
     double m;
     int y_max;
-    // node* next;
-
+    
     node(double x, double m, int y_max) {
         this->x = x;
         this->m = m;
         this->y_max = y_max;
-        // next = nullptr;
     }
-
+    
     node() {}
 };
+
+typedef struct {
+    vector<node> nodes;
+
+} EdgeTable[800];
 
 struct Point {
     int x;
@@ -171,14 +170,6 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
     }
 }
 
-
-void initTable(EdgeTable table) {
-    for (int i = 0; i < 800; i++) {
-        table[i].nodes = new list<node>();
-    }
-    
-}
-
 void edge2table(Point p1, Point p2, EdgeTable table) {
     if(p1.y == p2.y) {
         return;
@@ -193,28 +184,8 @@ void edge2table(Point p1, Point p2, EdgeTable table) {
 
     double m = (double)(p2.y-p1.y)/(p2.x-p1.x);
 
-    node* r = new node(x, 1/m, p2.y);
+    table[p1.y].nodes.push_back(node(x, 1/m, p2.y));
 
-    table[p1.y].nodes->push_back(r);
-
-    // node* r2 = new node(x, 1/m, p2.y);
-
-
-    // while(y < p2.y) {
-
-    //     if(x < table[y].xl) {
-    //         table[y].xl = ceil(x);
-    //     }
-
-    //     if(x > table[y].xr) {
-    //         table[y].xr = floor(x);
-    //     }
-
-    //     y++;
-    //     x += 1/m;
-
-    // }
-    
 }
 
 void polygon2table(Point p[], int n, EdgeTable table) {
@@ -229,71 +200,53 @@ void polygon2table(Point p[], int n, EdgeTable table) {
 }
 
 void table2screen(HDC hdc, EdgeTable table, COLORREF c) {
-    
-    list<node> active;
-    // node r1 = active.front(), r2 = std::next(r1);
+    vector<node> active;
 
     int y = 0;
 
     while(y < 800) {
-        sort(active.begin(), active.end(), [](node &a, node&b) {
+
+        // add nodes from table[y] to active if any
+        for (node n : table[y].nodes) {
+            active.push_back(n);
+        }
+
+        // remove edges that end at current y
+        active.erase(remove_if(active.begin(), active.end(), [y](const node& n) {
+            return n.y_max == y;
+        }), active.end());
+
+        // if active is empty or somehow has a single node just go to next scanline 
+        if (active.size() < 2) {
+            y++;
+            continue;
+        }
+
+        // sort active edges by x to draw
+        sort(active.begin(), active.end(), [](const node& a, const node& b) {
             return a.x < b.x;
         });
 
-        node r1 = active.front();
-        node r2 = *std::next(active.begin());
+        // fill between pairs of intersections 2 nodes at a time
+        for (int i = 0; i + 1 < active.size(); i += 2) {
+            int x1 = roundLocal(active[i].x);
+            int x2 = roundLocal(active[i + 1].x);
+            BresenhamsEfficientDDA(hdc, x1, y, x2, y, c);
 
-        BresenhamsEfficientDDA(hdc, r1.x, y, r2.x, y, c);
+        }
+
+        // increment x values for next scanline with 1/its slope
+        for (auto& n : active) {
+            n.x += n.m;
+        }
 
         y++;
 
-        if(r1.y_max == y) {
-            active.remove(r1);
-        }
-        if(r2.y_max == y) {
-            active.remove(r2);
-        }
-
-        r1.x += r1.m;
-        r2.x += r2.m;
-
-        active.splice(active.end(), *(table[y]));
-
-
-        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    // for (int i = 0; i < 800; i++)
-    // {
-    //     if(table[i].xl == INT_MAX || table[i].xr == INT_MIN) {
-    //        continue; 
-    //     }
-
-    //     if(table[i].xl < table[i].xr) {
-    //         for (int j = table[i].xl; j < table[i].xr; j++)
-    //         {
-    //             SetPixel(hdc, j, i, c);
-    //         }
-
-    //         // BresenhamsEfficientDDA(hdc, table[i].xl, i, table[i].xr, i, c);
-            
-    //     }
-    // }
 }
 
 void lineFill(HDC hdc, Point p[], int n, COLORREF c) {
     EdgeTable table;
-
-    // initTable(table);
 
     polygon2table(p, n, table);
 
@@ -317,14 +270,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 
             p[c] = pp;
             c++;
-            c = c%3;
+            c = c%7;
 
-            if(c%3 == 0) {
-                lineFill(hdc, p, 3, RGB(0, 0, 0));
-                // Sleep(1000);
-                BresenhamsEfficientDDA(hdc, p[c%3].x, p[c%3].y, p[c%3+1].x, p[c%3+1].y, RGB(0, 0, 0));
-                BresenhamsEfficientDDA(hdc, p[c%3+1].x, p[c%3+1].y, p[c%3+2].x, p[c%3+2].y, RGB(0, 0, 0));
-                BresenhamsEfficientDDA(hdc, p[c%3+2].x, p[c%3+2].y, p[c%3].x, p[c%3].y, RGB(0, 0, 0));
+            if(c%7 == 0) {
+                lineFill(hdc, p, 7, RGB(0, 0, 0));
 
             }
 
