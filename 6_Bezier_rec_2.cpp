@@ -30,7 +30,7 @@ struct Point {
 };
 
 
-void BezierRec2(HDC hdc, Point p1, Point p2, Point p3, Point p4, COLORREF c) {
+void BezierRec2(HDC hdc, Point p1, Point p2, Point p3, Point p4, COLORREF c1, COLORREF c2, COLORREF c3, COLORREF c4) {
 
     if(abs(p1.x-p4.x) <= 1 && abs(p1.y-p4.y) <= 1) {
         return;
@@ -40,15 +40,26 @@ void BezierRec2(HDC hdc, Point p1, Point p2, Point p3, Point p4, COLORREF c) {
     Point q2 = Point((p2.x+p3.x)/2, (p2.y+p3.y)/2);
     Point q3 = Point((p3.x+p4.x)/2, (p3.y+p4.y)/2);
     
+    COLORREF cq1 = RGB((GetRValue(c1)+GetRValue(c2))/2, (GetGValue(c1)+GetGValue(c2))/2, (GetBValue(c1)+GetBValue(c2))/2);
+    COLORREF cq2 = RGB((GetRValue(c2)+GetRValue(c3))/2, (GetGValue(c2)+GetGValue(c3))/2, (GetBValue(c2)+GetBValue(c3))/2);
+    COLORREF cq3 = RGB((GetRValue(c3)+GetRValue(c4))/2, (GetGValue(c3)+GetGValue(c4))/2, (GetBValue(c3)+GetBValue(c4))/2);
+    
+    
     Point r1 = Point((q1.x+q2.x)/2, (q1.y+q2.y)/2);
     Point r2 = Point((q2.x+q3.x)/2, (q2.y+q3.y)/2);
+    
+    COLORREF cr1 = RGB((GetRValue(cq1)+GetRValue(cq2))/2, (GetGValue(cq1)+GetGValue(cq2))/2, (GetBValue(cq1)+GetBValue(cq2))/2);
+    COLORREF cr2 = RGB((GetRValue(cq2)+GetRValue(cq3))/2, (GetGValue(cq2)+GetGValue(cq3))/2, (GetBValue(cq2)+GetBValue(cq3))/2);
+    
 
     Point m = Point((r1.x+r2.x)/2, (r1.y+r2.y)/2);
+    
+    COLORREF cm = RGB((GetRValue(cr1)+GetRValue(cr2))/2, (GetGValue(cr1)+GetGValue(cr2))/2, (GetBValue(cr1)+GetBValue(cr2))/2);
 
-    SetPixel(hdc, m.x, m.y, c);
+    SetPixel(hdc, m.x, m.y, cm);
 
-    BezierRec2(hdc, p1, q1, r1, m, c);
-    BezierRec2(hdc, m, r2, q3, p4, c);
+    BezierRec2(hdc, p1, q1, r1, m, c1, cq1, cr1, cm);
+    BezierRec2(hdc, m, r2, q3, p4, cm, cr2, cq3, c4);
 
 }
 
@@ -56,12 +67,26 @@ void BezierRec2(HDC hdc, Point p1, Point p2, Point p3, Point p4, COLORREF c) {
 // Window procedure
 LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
     HDC hdc;
+    static Point p[30], pp;
+    static int x, y, c = 0;
 
     switch (m) {
         case WM_LBUTTONDOWN:
             hdc = GetDC(hwnd);
 
-            BezierRec2(hdc, Point(100, 100), Point(150, 150), Point(200, 150), Point(250, 100), RGB(0, 0, 0));
+            x = LOWORD(lp);
+            y = HIWORD(lp);
+
+            pp = Point(x, y);
+
+            p[c] = pp;
+            c++;
+            c = c % 4;
+
+            if(c % 4 == 0) {
+                BezierRec2(hdc, p[0], p[1], p[2], p[3], RGB(0, 255, 0), RGB(255, 255, 0), RGB(255, 0, 0), RGB(0, 0, 255));
+
+            }
 
             ReleaseDC(hwnd, hdc);
             break;
