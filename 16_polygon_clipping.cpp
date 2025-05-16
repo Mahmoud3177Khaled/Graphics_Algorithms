@@ -408,7 +408,7 @@ void BresenhamsEfficientDDA(HDC hdc, int x1, int y1, int x2, int y2, COLORREF c)
                 SetPixel(hdc, x, y, c);
             }
 
-        } else if (x2 < x1 && y2 < y1) {
+        } else if (x2 <= x1 && y2 <= y1) {
             while(x > x2) {
                 if(d1 > 0) {
                     x--;
@@ -640,9 +640,9 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
 
             cout << "im here" << endl;
 
-            p1 = Point(110, 110);
-            p2 = Point(200, 200);
-            p3 = Point(200, 230);
+            p1 = Point(140, 110);
+            p2 = Point(230, 200);
+            p3 = Point(230, 230);
             p4 = Point(170, 200);
             p5 = Point(130, 170);
 
@@ -657,35 +657,46 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
             yb = 150;
             yt = 200;
 
-            // BresenhamsEfficientDDA(hdc, p1.x, p1.y, p2.x, p2.y, RGB(255, 0, 0));
-            // BresenhamsEfficientDDA(hdc, p2.x, p2.y, p3.x, p3.y, RGB(255, 0, 0));
-            // BresenhamsEfficientDDA(hdc, p3.x, p3.y, p4.x, p4.y, RGB(255, 0, 0));
-            // BresenhamsEfficientDDA(hdc, p4.x, p4.y, p5.x, p5.y, RGB(255, 0, 0));
-            // BresenhamsEfficientDDA(hdc, p5.x, p5.y, p1.x, p1.y, RGB(255, 0, 0));
+            BresenhamsEfficientDDA(hdc, p1.x, p1.y, p2.x, p2.y, RGB(255, 0, 0));
+            BresenhamsEfficientDDA(hdc, p2.x, p2.y, p3.x, p3.y, RGB(255, 0, 0));
+            BresenhamsEfficientDDA(hdc, p3.x, p3.y, p4.x, p4.y, RGB(255, 0, 0));
+            BresenhamsEfficientDDA(hdc, p4.x, p4.y, p5.x, p5.y, RGB(255, 0, 0));
+            BresenhamsEfficientDDA(hdc, p5.x, p5.y, p1.x, p1.y, RGB(255, 0, 0));
 
-            // BresenhamsEfficientDDA(hdc, xl, xl, yb, yt, RGB(0, 0, 255));
-            // BresenhamsEfficientDDA(hdc, xl, xr, yt, yt, RGB(0, 0, 255));
-            // BresenhamsEfficientDDA(hdc, xl, xl, yt, yb, RGB(0, 0, 255));
-            // BresenhamsEfficientDDA(hdc, xr, xl, yt, yt, RGB(0, 0, 255));
+            BresenhamsEfficientDDA(hdc, xl, xl, yb, yt, RGB(0, 0, 255));
+            BresenhamsEfficientDDA(hdc, xl, xr, yt, yt, RGB(0, 0, 255));
+            BresenhamsEfficientDDA(hdc, xl, xl, yt, yb, RGB(0, 0, 255));
+            BresenhamsEfficientDDA(hdc, xr, xl, yt, yt, RGB(0, 0, 255));
 
             resultPoly = polygonClip(p, xl, xr, yb, yt);
 
-            cout << "p1: " << resultPoly[0].x << " " << resultPoly[0].y << endl;
-            cout << "p2: " << resultPoly[1].x << " " << resultPoly[1].y << endl;
-            cout << "p3: " << resultPoly[2].x << " " << resultPoly[2].y << endl;
-            cout << "p4: " << resultPoly[3].x << " " << resultPoly[3].y << endl;
-            cout << "p5: " << resultPoly[4].x << " " << resultPoly[4].y << endl;
+            // cout << "p1: " << resultPoly[0].x << " " << resultPoly[0].y << endl;
+            // cout << "p2: " << resultPoly[1].x << " " << resultPoly[1].y << endl;
+            // cout << "p3: " << resultPoly[2].x << " " << resultPoly[2].y << endl;
+            // cout << "p4: " << resultPoly[3].x << " " << resultPoly[3].y << endl;
+            // cout << "p5: " << resultPoly[4].x << " " << resultPoly[4].y << endl;
+
+            for (int i = 0; i < resultPoly.size(); i++) {
+                cout << "p" << i << ": " << resultPoly[i].x << " " << resultPoly[i].y << endl;
+            }
+            
 
 
 
         
 
-            BresenhamsEfficientDDA(hdc, resultPoly[0].x, resultPoly[0].y, resultPoly[1].x, resultPoly[1].y, RGB(0, 0, 0));
-            BresenhamsEfficientDDA(hdc, resultPoly[1].x, resultPoly[1].y, resultPoly[2].x, resultPoly[2].y, RGB(0, 0, 0));
-            BresenhamsEfficientDDA(hdc, resultPoly[2].x, resultPoly[2].y, resultPoly[3].x, resultPoly[3].y, RGB(0, 0, 0));
-            BresenhamsEfficientDDA(hdc, resultPoly[3].x, resultPoly[3].y, resultPoly[4].x, resultPoly[4].y, RGB(0, 0, 0));
-            BresenhamsEfficientDDA(hdc, resultPoly[4].x, resultPoly[4].y, resultPoly[0].x, resultPoly[0].y, RGB(0, 0, 0));
+            // BresenhamsEfficientDDA(hdc, resultPoly[0].x, resultPoly[0].y, resultPoly[1].x, resultPoly[1].y, RGB(0, 0, 0));
+            // BresenhamsEfficientDDA(hdc, resultPoly[1].x, resultPoly[1].y, resultPoly[2].x, resultPoly[2].y, RGB(0, 0, 0));
+            // BresenhamsEfficientDDA(hdc, resultPoly[3].x, resultPoly[3].y, resultPoly[2].x, resultPoly[2].y, RGB(0, 0, 0));
+            // BresenhamsEfficientDDA(hdc, resultPoly[3].x, resultPoly[3].y, resultPoly[4].x, resultPoly[4].y, RGB(0, 0, 0));
+            // BresenhamsEfficientDDA(hdc, resultPoly[4].x, resultPoly[4].y, resultPoly[5].x, resultPoly[5].y, RGB(0, 0, 0));
+            // BresenhamsEfficientDDA(hdc, resultPoly[5].x, resultPoly[5].y, resultPoly[0].x, resultPoly[0].y, RGB(0, 0, 0));
 
+            for (int i = 0; i < resultPoly.size(); i++) {
+                BresenhamsEfficientDDA(hdc, resultPoly[i%resultPoly.size()].x, resultPoly[i%resultPoly.size()].y,
+                                            resultPoly[(i+1)%resultPoly.size()].x, resultPoly[(i+1)%resultPoly.size()].y, RGB(0, 0, 0));
+            }
+            
 
             ReleaseDC(hwnd, hdc);
             break;
