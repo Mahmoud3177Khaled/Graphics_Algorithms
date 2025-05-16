@@ -506,7 +506,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
     Point p1 = p[n-1];
     vector<Point> output1, output2, output3, output4;
     
-    bool in1 = p1.x >= xl;
+    bool in1 = p1.x > xl;
     
     for (int i = 0; i < n; i++) {
         
@@ -533,7 +533,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
         
     }
 
-    in1 = p1.x <= xr;
+    in1 = p1.x < xr;
     
     n = output1.size();
     p1 = output1[n-1];
@@ -541,7 +541,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
         
         Point p2 = output1[i];
         // cout << "in test: " << p2.x << " " << p2.y << endl;
-        bool in2 = p2.x <= xr;
+        bool in2 = p2.x < xr;
         
         if(in1 && in2) {
             output2.push_back(p2);
@@ -562,7 +562,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
         
     }
     
-    in1 = p1.y >= yb;
+    in1 = p1.y > yb;
     
     n = output2.size();
     p1 = output2[n-1];
@@ -570,7 +570,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
         
         Point p2 = output2[i];
         // cout << "in test: " << p2.x << " " << p2.y << endl;
-        bool in2 = p2.y >= yb;
+        bool in2 = p2.y > yb;
         
         if(in1 && in2) {
             output3.push_back(p2);
@@ -591,7 +591,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
         
     }
     
-    in1 = p1.y <= yt;
+    in1 = p1.y < yt;
     
     n = output3.size();
     p1 = output3[n-1];
@@ -599,7 +599,7 @@ vector<Point> polygonClip(vector<Point> p, int xl, int xr, int yb, int yt) {
         
         Point p2 = output3[i];
         // cout << "in test: " << p2.x << " " << p2.y << endl;
-        bool in2 = p2.y <= yt;
+        bool in2 = p2.y < yt;
         
         if(in1 && in2) {
             output4.push_back(p2);
@@ -657,24 +657,24 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp) {
             yb = 150;
             yt = 200;
 
-            BresenhamsEfficientDDA(hdc, p1.x, p1.y, p2.x, p2.y, RGB(255, 0, 0));
-            BresenhamsEfficientDDA(hdc, p2.x, p2.y, p3.x, p3.y, RGB(255, 0, 0));
-            BresenhamsEfficientDDA(hdc, p3.x, p3.y, p4.x, p4.y, RGB(255, 0, 0));
-            BresenhamsEfficientDDA(hdc, p4.x, p4.y, p5.x, p5.y, RGB(255, 0, 0));
-            BresenhamsEfficientDDA(hdc, p5.x, p5.y, p1.x, p1.y, RGB(255, 0, 0));
+            // BresenhamsEfficientDDA(hdc, p1.x, p1.y, p2.x, p2.y, RGB(255, 0, 0));
+            // BresenhamsEfficientDDA(hdc, p2.x, p2.y, p3.x, p3.y, RGB(255, 0, 0));
+            // BresenhamsEfficientDDA(hdc, p3.x, p3.y, p4.x, p4.y, RGB(255, 0, 0));
+            // BresenhamsEfficientDDA(hdc, p4.x, p4.y, p5.x, p5.y, RGB(255, 0, 0));
+            // BresenhamsEfficientDDA(hdc, p5.x, p5.y, p1.x, p1.y, RGB(255, 0, 0));
 
-            BresenhamsEfficientDDA(hdc, xl, xl, yb, yt, RGB(0, 0, 255));
-            BresenhamsEfficientDDA(hdc, xl, xr, yt, yt, RGB(0, 0, 255));
-            BresenhamsEfficientDDA(hdc, xl, xl, yt, yb, RGB(0, 0, 255));
-            BresenhamsEfficientDDA(hdc, xr, xl, yt, yt, RGB(0, 0, 255));
+            // BresenhamsEfficientDDA(hdc, xl, xl, yb, yt, RGB(0, 0, 255));
+            // BresenhamsEfficientDDA(hdc, xl, xr, yt, yt, RGB(0, 0, 255));
+            // BresenhamsEfficientDDA(hdc, xl, xl, yt, yb, RGB(0, 0, 255));
+            // BresenhamsEfficientDDA(hdc, xr, xl, yt, yt, RGB(0, 0, 255));
 
             resultPoly = polygonClip(p, xl, xr, yb, yt);
 
             cout << "p1: " << resultPoly[0].x << " " << resultPoly[0].y << endl;
-            cout << "p1: " << resultPoly[1].x << " " << resultPoly[1].y << endl;
-            cout << "p1: " << resultPoly[2].x << " " << resultPoly[2].y << endl;
-            cout << "p1: " << resultPoly[3].x << " " << resultPoly[3].y << endl;
-            cout << "p1: " << resultPoly[4].x << " " << resultPoly[4].y << endl;
+            cout << "p2: " << resultPoly[1].x << " " << resultPoly[1].y << endl;
+            cout << "p3: " << resultPoly[2].x << " " << resultPoly[2].y << endl;
+            cout << "p4: " << resultPoly[3].x << " " << resultPoly[3].y << endl;
+            cout << "p5: " << resultPoly[4].x << " " << resultPoly[4].y << endl;
 
 
 
